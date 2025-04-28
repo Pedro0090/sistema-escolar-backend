@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
@@ -14,13 +16,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AlunoPostRequestBody {
 
-    @Pattern(regexp = "^[A-ZÀ-Ö][a-zà-ö]+( (?:[dD]e|[dD]o|[dD]a|[dD]os|[dD]as|[A-ZÀ-Ö][a-zà-ö]+))*$",
-            message = "Campo deve iniciar com letra maiúscula e ter somente letras")
+    @Size(min = 3, message = "O nome não pode ter menos que 3 letras")
     @NotBlank(message = "Campo não pode ser vazio")
     private String nome;
 
@@ -29,6 +31,8 @@ public class AlunoPostRequestBody {
     @Size(min = 11, max = 11)
     @CPF(message = "CPF inválido")
     private String cpf;
+
+    private String matricula;
 
     @Schema(example = "(00) 00000-0000")
     @Pattern(regexp = "^\\(?\\d{2}\\)?\\s?9?\\d{4}-?\\d{4}$",
@@ -51,13 +55,11 @@ public class AlunoPostRequestBody {
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
 
-    @Pattern(regexp = "^[A-ZÀ-Ö][a-zà-ö]+( (?:[dD]e|[dD]o|[dD]a|[dD]os|[dD]as|[A-ZÀ-Ö][a-zà-ö]+))*$",
-            message = "Campo deve iniciar com letra maiúscula e ter somente letras")
+    @Size(min = 3, message = "O nome não pode ter menos que 3 letras")
     @NotBlank(message = "Campo não pode ser vazio")
     private String nomeMae;
 
-    @Pattern(regexp = "^[A-ZÀ-Ö][a-zà-ö]+( (?:[dD]e|[dD]o|[dD]a|[dD]os|[dD]as|[A-ZÀ-Ö][a-zà-ö]+))*$",
-            message = "Campo deve iniciar com letra maiúscula e ter somente letras")
+    @Size(min = 3, message = "O nome não pode ter menos que 3 letras")
     @NotBlank(message = "Campo não pode ser vazio")
     private String nomePai;
 

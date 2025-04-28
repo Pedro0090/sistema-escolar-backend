@@ -7,6 +7,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
@@ -16,13 +18,14 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AlunoPutRequestBody {
 
     @Id
     private Long id;
 
-    @Pattern(regexp = "^[A-ZÀ-Ö][a-zà-ö]+( (?:[dD]e|[dD]o|[dD]a|[dD]os|[dD]as|[A-ZÀ-Ö][a-zà-ö]+))*$",
-            message = "Campo deve iniciar com letra maiúscula e ter somente letras")
+    @Size(min = 3, message = "O nome não pode ter menos que 3 letras")
     @NotBlank(message = "Campo não pode ser vazio")
     private String nome;
 
@@ -30,6 +33,8 @@ public class AlunoPutRequestBody {
     @Size(min = 11, max = 11)
     @CPF(message = "CPF inválido")
     private String cpf;
+
+    private String matricula;
 
     @Pattern(regexp = "^\\(?\\d{2}\\)?\\s?9?\\d{4}-?\\d{4}$",
             message = "Telefone inválido! Use o formato (99) 99999-9999")
@@ -49,13 +54,11 @@ public class AlunoPutRequestBody {
     @NotNull(message = "Campo não pode ser vazio")
     private Sexo sexo;
 
-    @Pattern(regexp = "^[A-ZÀ-Ö][a-zà-ö]+( (?:[dD]e|[dD]o|[dD]a|[dD]os|[dD]as|[A-ZÀ-Ö][a-zà-ö]+))*$",
-            message = "Campo deve iniciar com letra maiúscula e ter somente letras")
+    @Size(min = 3, message = "O nome não pode ter menos que 3 letras")
     @NotBlank(message = "Campo não pode ser vazio")
     private String nomeMae;
 
-    @Pattern(regexp = "^[A-ZÀ-Ö][a-zà-ö]+( (?:[dD]e|[dD]o|[dD]a|[dD]os|[dD]as|[A-ZÀ-Ö][a-zà-ö]+))*$",
-            message = "Campo deve iniciar com letra maiúscula e ter somente letras")
+    @Size(min = 3, message = "O nome não pode ter menos que 3 letras")
     @NotBlank(message = "Campo não pode ser vazio")
     private String nomePai;
 

@@ -1,11 +1,11 @@
 package com.pedro_augusto.sistema_escolar.repository;
 
-import com.pedro_augusto.sistema_escolar.domain.Aluno;
+import com.pedro_augusto.sistema_escolar.domain.AlunoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface AlunoRespository extends JpaRepository<Aluno, Long> {
+import java.util.Optional;
 
-    public Aluno findByMatricula(Integer matricula);
+@Repository
+public interface AlunoRespository extends JpaRepository<AlunoEntity, Long> {
 }

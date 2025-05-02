@@ -1,4 +1,4 @@
-package com.pedro_augusto.sistema_escolar.dtos.requests;
+package com.pedro_augusto.sistema_escolar.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pedro_augusto.sistema_escolar.domain.enumerations.Sexo;
@@ -31,8 +31,6 @@ public class AlunoPostRequestBody {
     @Size(min = 11, max = 11)
     @CPF(message = "CPF inválido")
     private String cpf;
-
-    private String matricula;
 
     @Schema(example = "(00) 00000-0000")
     @Pattern(regexp = "^\\(?\\d{2}\\)?\\s?9?\\d{4}-?\\d{4}$",

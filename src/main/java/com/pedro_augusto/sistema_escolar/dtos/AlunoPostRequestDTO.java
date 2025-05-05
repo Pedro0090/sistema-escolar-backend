@@ -3,6 +3,7 @@ package com.pedro_augusto.sistema_escolar.dtos;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pedro_augusto.sistema_escolar.domain.enumerations.Sexo;
 import com.pedro_augusto.sistema_escolar.domain.enumerations.SituacaoMatricula;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
@@ -19,21 +20,19 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AlunoPutRequestAndDetails {
-
-    private Long id;
+public class AlunoPostRequestDTO {
 
     @Size(min = 3, message = "O nome não pode ter menos que 3 letras")
     @NotBlank(message = "Campo não pode ser vazio")
     private String nome;
 
+    @Schema(description = "CPF do usuário somente com números", example = "00000000000")
     @NotBlank(message = "Campo não pode ser vazio")
     @Size(min = 11, max = 11)
     @CPF(message = "CPF inválido")
     private String cpf;
 
-    private String matricula;
-
+    @Schema(example = "(00) 00000-0000")
     @Pattern(regexp = "^\\(?\\d{2}\\)?\\s?9?\\d{4}-?\\d{4}$",
             message = "Telefone inválido! Use o formato (99) 99999-9999")
     @NotEmpty(message = "Campo não pode ser vazio")
@@ -43,13 +42,15 @@ public class AlunoPutRequestAndDetails {
     @NotBlank(message = "Campo não pode ser vazio")
     private String email;
 
+    @Schema(description = "Data no formato dia, mês e ano", example = "01/01/2000")
     @JsonFormat(pattern = "dd/MM/yyyy")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @NotNull(message = "Campo não pode ser vazio")
     private LocalDate dataNascimento;
 
-    @Enumerated(EnumType.STRING)
+    @Schema(example = "M, F, OUTRO")
     @NotNull(message = "Campo não pode ser vazio")
+    @Enumerated(EnumType.STRING)
     private Sexo sexo;
 
     @Size(min = 3, message = "O nome não pode ter menos que 3 letras")

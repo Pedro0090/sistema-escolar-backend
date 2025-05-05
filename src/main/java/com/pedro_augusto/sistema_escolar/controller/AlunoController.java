@@ -1,8 +1,8 @@
 package com.pedro_augusto.sistema_escolar.controller;
 
 import com.pedro_augusto.sistema_escolar.dtos.AlunoListagemDTO;
-import com.pedro_augusto.sistema_escolar.dtos.AlunoPostRequestBody;
-import com.pedro_augusto.sistema_escolar.dtos.AlunoPutRequestAndDetails;
+import com.pedro_augusto.sistema_escolar.dtos.AlunoPostRequestDTO;
+import com.pedro_augusto.sistema_escolar.dtos.AlunoPutRequestAndDetailsDTO;
 import com.pedro_augusto.sistema_escolar.service.AlunoService;
 import com.pedro_augusto.sistema_escolar.swagger.AlunoControllerSwagger;
 import jakarta.validation.Valid;
@@ -36,25 +36,25 @@ public class AlunoController implements AlunoControllerSwagger {
     }
 
     @GetMapping(path = "/{matricula}")
-    public ResponseEntity<AlunoPutRequestAndDetails> findByMatricula(@PathVariable("matricula") String matricula) {
+    public ResponseEntity<AlunoPutRequestAndDetailsDTO> findByMatricula(@PathVariable("matricula") String matricula) {
         log.info("GET /alunos/{} - Buscando aluno", matricula);
-        AlunoPutRequestAndDetails aluno = alunoService.findByMatricula(matricula);
+        AlunoPutRequestAndDetailsDTO aluno = alunoService.findByMatricula(matricula);
         log.info("GET /alunos/{} - Aluno encontrado", matricula);
         return ResponseEntity.ok(aluno);
     }
 
     @PostMapping
-    public ResponseEntity<AlunoPostRequestBody> save(@RequestBody @Valid AlunoPostRequestBody alunoPostRequestBody) {
-        log.info("POST /alunos - Criando aluno {}", alunoPostRequestBody.getNome());
-        AlunoPostRequestBody alunoSalvo = alunoService.save(alunoPostRequestBody);
+    public ResponseEntity<AlunoPostRequestDTO> save(@RequestBody @Valid AlunoPostRequestDTO alunoPostRequestDTO) {
+        log.info("POST /alunos - Criando aluno {}", alunoPostRequestDTO.getNome());
+        AlunoPostRequestDTO alunoSalvo = alunoService.save(alunoPostRequestDTO);
         log.info("POST /alunos - Aluno {} criado", alunoSalvo.getNome());
         return new ResponseEntity<>(alunoSalvo, HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<AlunoPutRequestAndDetails> replace(@RequestBody @Valid AlunoPutRequestAndDetails alunoPutRequestAndDetails) {
-        log.info("PUT /alunos - Atualizando aluno com matricula {}", alunoPutRequestAndDetails.getMatricula());
-        AlunoPutRequestAndDetails alunoAtualizado = alunoService.replace(alunoPutRequestAndDetails);
+    public ResponseEntity<AlunoPutRequestAndDetailsDTO> replace(@RequestBody @Valid AlunoPutRequestAndDetailsDTO alunoPutRequestAndDetailsDTO) {
+        log.info("PUT /alunos - Atualizando aluno com matricula {}", alunoPutRequestAndDetailsDTO.getMatricula());
+        AlunoPutRequestAndDetailsDTO alunoAtualizado = alunoService.replace(alunoPutRequestAndDetailsDTO);
         log.info("PUT /alunos - Aluno com matricula {} atualizado", alunoAtualizado.getMatricula());
         return new ResponseEntity<>(alunoAtualizado, HttpStatus.OK);
     }

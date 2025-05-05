@@ -1,8 +1,8 @@
 package com.pedro_augusto.sistema_escolar.swagger;
 
 import com.pedro_augusto.sistema_escolar.dtos.AlunoListagemDTO;
-import com.pedro_augusto.sistema_escolar.dtos.AlunoPostRequestBody;
-import com.pedro_augusto.sistema_escolar.dtos.AlunoPutRequestAndDetails;
+import com.pedro_augusto.sistema_escolar.dtos.AlunoPostRequestDTO;
+import com.pedro_augusto.sistema_escolar.dtos.AlunoPutRequestAndDetailsDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,7 +29,7 @@ public interface AlunoControllerSwagger {
             @ApiResponse(responseCode = "200", description = "Aluno encontrado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, aluno não encontrado")
     })
-    ResponseEntity<AlunoPutRequestAndDetails> findByMatricula(@Parameter(description = "Combinação de caracteres para" +
+    ResponseEntity<AlunoPutRequestAndDetailsDTO> findByMatricula(@Parameter(description = "Combinação de caracteres para" +
     " matricula", required = true) @PathVariable("matricula") String matricula);
 
 
@@ -39,8 +39,8 @@ public interface AlunoControllerSwagger {
             @ApiResponse(responseCode = "201", description = "Aluno criado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada")
     })
-    ResponseEntity<AlunoPostRequestBody> save(@RequestBody @Valid @Schema(description = "Informações do aluno"
-    ) AlunoPostRequestBody alunoPostRequestBody);
+    ResponseEntity<AlunoPostRequestDTO> save(@RequestBody @Valid @Schema(description = "Informações do aluno"
+    ) AlunoPostRequestDTO alunoPostRequestDTO);
 
 
     @Operation(summary = "Atualiza um aluno já existente", description = "Endpoint que modifica/atualiza" +
@@ -49,8 +49,8 @@ public interface AlunoControllerSwagger {
             @ApiResponse(responseCode = "200", description = "Aluno atualizado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, aluno não encontrado")
     })
-    ResponseEntity<AlunoPutRequestAndDetails> replace(@RequestBody @Valid @Schema(description = "Informações do aluno"
-    ) AlunoPutRequestAndDetails alunoPutRequestAndDetails);
+    ResponseEntity<AlunoPutRequestAndDetailsDTO> replace(@RequestBody @Valid @Schema(description = "Informações do aluno"
+    ) AlunoPutRequestAndDetailsDTO alunoPutRequestAndDetailsDTO);
 
 
     @Operation(summary = "Deleta um aluno", description = "Deleta um aluno válido e existente com seus dados, atrvés" +

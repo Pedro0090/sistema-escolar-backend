@@ -24,7 +24,7 @@ public class AlunoComponent {
     }
 
     public Optional<AlunoEntity> findByMatricula(String matricula) {
-        return (alunoRespository.findByMatricula(matricula));
+        return alunoRespository.findByMatricula(matricula);
     }
 
     public AlunoEntity adicionarMatriculaAndSalvar(AlunoEntity alunoEntity, String matricula) {

@@ -1,14 +1,12 @@
 package com.pedro_augusto.sistema_escolar.controller;
 
-import com.pedro_augusto.sistema_escolar.domain.AlunoEntity;
-import com.pedro_augusto.sistema_escolar.dtos.AlunoInformacoesDTO;
 import com.pedro_augusto.sistema_escolar.dtos.AlunoListagemDTO;
-import com.pedro_augusto.sistema_escolar.dtos.requests.AlunoPostRequestBody;
-import com.pedro_augusto.sistema_escolar.dtos.requests.AlunoPutRequestBody;
+import com.pedro_augusto.sistema_escolar.dtos.AlunoPostRequestDTO;
+import com.pedro_augusto.sistema_escolar.dtos.AlunoPutRequestAndDetailsDTO;
+import com.pedro_augusto.sistema_escolar.exceptions.BadRequestException;
 import com.pedro_augusto.sistema_escolar.service.AlunoService;
 import com.pedro_augusto.sistema_escolar.utils.AlunoCreator;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,25 +30,11 @@ class AlunoControllerTest {
     @Mock
     private AlunoService alunoServiceMock;
 
-    @BeforeEach
-    void setUp() {
-        BDDMockito.when(alunoServiceMock.listAll()).thenReturn(List.of(AlunoCreator.criarAlunoListagemDTOValido()));
-
-        BDDMockito.when(alunoServiceMock.findById(ArgumentMatchers.anyLong()))
-                .thenReturn(AlunoCreator.criarAlunoValido());
-
-        BDDMockito.when(alunoServiceMock.save(ArgumentMatchers.any(AlunoPostRequestBody.class)))
-                .thenReturn(AlunoCreator.criarAlunoInformacoesDTOValido());
-
-        BDDMockito.when(alunoServiceMock.replace(ArgumentMatchers.any(AlunoPutRequestBody.class)))
-                .thenReturn(AlunoCreator.criarAlunoValido());
-
-        BDDMockito.doNothing().when(alunoServiceMock).delete(ArgumentMatchers.anyLong());
-    }
-
     @Test
     @DisplayName("findAll retorna uma lista com todos os alunos quando bem sucedido")
-    void findAll_retornaListaAlunos_QuandoBemSucedido() {
+    void findAll_retornaListaAlunoListagemDTO_QuandoBemSucedido() {
+        BDDMockito.when(alunoServiceMock.listAll()).thenReturn(List.of(AlunoCreator.criarAlunoListagemDTOValido()));
+
         String nomeEsperado = AlunoCreator.criarAlunoListagemDTOValido().getNome();
 
         ResponseEntity<List<AlunoListagemDTO>> listaAlunos = alunoController.findAll();
@@ -72,44 +56,93 @@ class AlunoControllerTest {
     }
 
     @Test
-    @DisplayName("findById retorna um aluno quando bem sucedido")
-    void findById_retornaAluno_QuandoBemSucedido() {
-        Long idEsperado = AlunoCreator.criarAlunoValido().getId();
+    @DisplayName("findByMatricula retorna um aluno quando bem sucedido")
+    void findByMatricula_retornaAlunoPutRequestAndDetails_QuandoBemSucedido() {
+        BDDMockito.when(alunoServiceMock.findByMatricula(ArgumentMatchers.anyString()))
+                .thenReturn(AlunoCreator.criarAlunoPutRequestAndDetailsDTOValido());
 
-        ResponseEntity<AlunoEntity> aluno = alunoController.findById(1L);
+        String matriculaEsperada = AlunoCreator.criarAlunoPutRequestAndDetailsDTOValido().getMatricula();
+        Long idEsperado = AlunoCreator.criarAlunoPutRequestAndDetailsDTOValido().getId();
+
+        ResponseEntity<AlunoPutRequestAndDetailsDTO> aluno = alunoController.findByMatricula("SAA23042025000001");
 
         Assertions.assertThat(aluno.getBody()).isNotNull();
-        Assertions.assertThat((aluno.getBody()).getId()).isEqualTo(idEsperado);
+        Assertions.assertThat(aluno.getBody().getMatricula()).isEqualTo(matriculaEsperada);
+        Assertions.assertThat(aluno.getBody().getId()).isEqualTo(idEsperado);
         Assertions.assertThat(aluno.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    @DisplayName("save retorna um aluno quando bem sucedido")
-    void save_retornaAluno_QuandoBemSucedido() {
-        ResponseEntity<AlunoInformacoesDTO> aluno =
-                alunoController.save(AlunoCreator.criarAlunoPostRequestBodyValido());
+    @DisplayName("findByMatricula retorna BadRequest quando aluno não encontrado")
+    void findByMatricula_retornaBadRequest_QuandoAlunoNaoEncontrado() {
+        BDDMockito.when(alunoServiceMock.findByMatricula(ArgumentMatchers.anyString()))
+                .thenThrow(new BadRequestException("Aluno não encontrado"));
 
-        Assertions.assertThat(aluno.getBody()).isNotNull().isEqualTo(AlunoCreator.criarAlunoInformacoesDTOValido());
+        Assertions.assertThatThrownBy(() -> alunoController.findByMatricula("AAAA"))
+                .isInstanceOf(BadRequestException.class).hasMessage("Aluno não encontrado");
+    }
+
+    @Test
+    @DisplayName("save retorna um aluno quando bem sucedido")
+    void save_retornaAlunoPostRequestBody_QuandoBemSucedido() {
+        BDDMockito.when(alunoServiceMock.save(ArgumentMatchers.any(AlunoPostRequestDTO.class)))
+                .thenReturn(AlunoCreator.criarAlunoPostRequestDTOValido());
+
+        ResponseEntity<AlunoPostRequestDTO> aluno =
+                alunoController.save(AlunoCreator.criarAlunoPostRequestDTOValido());
+
+        Assertions.assertThat(aluno.getBody()).isNotNull().isEqualTo(AlunoCreator.criarAlunoPostRequestDTOValido());
         Assertions.assertThat(aluno.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
-    @DisplayName("replace atualiza um aluno quando bem sucedido")
-    void replace_retornaAluno_QuandoBemSucedido() {
-        ResponseEntity<AlunoEntity> aluno = alunoController.replace(AlunoCreator.criarAlunoPutRequestBodyValido());
+    @DisplayName("save retorna BadRequest quando nome null")
+    void save_retornaBadRequest_QuandoNomeNull() {
+        AlunoPostRequestDTO alunoInvalido = AlunoCreator.criarAlunoPostRequestDTOValido();
+        alunoInvalido.setNome(null);
 
-        Assertions.assertThat(aluno.getBody()).isNotNull().isEqualTo(AlunoCreator.criarAlunoValido());
+        BDDMockito.when(alunoServiceMock.save(ArgumentMatchers.any(AlunoPostRequestDTO.class)))
+                .thenThrow(new BadRequestException("Validation failed for object='alunoPostRequestBody'"));
+
+        Assertions.assertThatThrownBy(() -> alunoController.save(alunoInvalido)).isInstanceOf(BadRequestException.class)
+                .hasMessage("Validation failed for object='alunoPostRequestBody'");
+    }
+
+    @Test
+    @DisplayName("replace atualiza um aluno quando bem sucedido")
+    void replace_retornaAlunoPutRequestAndDetails_QuandoBemSucedido() {
+        BDDMockito.when(alunoServiceMock.replace(ArgumentMatchers.any(AlunoPutRequestAndDetailsDTO.class)))
+                .thenReturn(AlunoCreator.criarAlunoPutRequestAndDetailsDTOValido());
+
+        ResponseEntity<AlunoPutRequestAndDetailsDTO> aluno =
+                alunoController.replace(AlunoCreator.criarAlunoPutRequestAndDetailsDTOValido());
+
+        Assertions.assertThat(aluno.getBody()).isNotNull().isEqualTo(
+                AlunoCreator.criarAlunoPutRequestAndDetailsDTOValido());
         Assertions.assertThat(aluno.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
     @DisplayName("delete deleta um aluno quando bem sucedido")
     void delete_deletaAluno_QuandoBemSucedido() {
-        ResponseEntity<Void> body = alunoController.delete(1L);
+        BDDMockito.doNothing().when(alunoServiceMock).delete(ArgumentMatchers.anyString());
 
-        Assertions.assertThatCode(() -> alunoController.delete(1L)).doesNotThrowAnyException();
+        ResponseEntity<Void> body = alunoController.delete("SAA23042025000001");
+
+        Assertions.assertThatCode(() -> alunoController.delete("SAA23042025000001")).doesNotThrowAnyException();
 
         Assertions.assertThat(body).isNotNull();
         Assertions.assertThat(body.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    @Test
+    @DisplayName("delete retorna BadRequest quando aluno não é encontrado")
+    void delete_retornaBadRequest_QuandoAlunoNaoEncontrado() {
+        BDDMockito.doThrow(new BadRequestException("Aluno não encontrado")).when(alunoServiceMock)
+                .delete(ArgumentMatchers.anyString());
+
+
+        Assertions.assertThatThrownBy(() -> alunoServiceMock.delete("AAA"))
+                .isInstanceOf(BadRequestException.class).hasMessage("Aluno não encontrado");
     }
 }

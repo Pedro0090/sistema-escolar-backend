@@ -23,6 +23,10 @@ public class AlunoComponent {
         return alunoRespository.findAll();
     }
 
+    public AlunoEntity findById(Long id) {
+        return alunoRespository.findById(id).orElseThrow(() -> new BadRequestException("Aluno não encontrado"));
+    }
+
     public Optional<AlunoEntity> findByMatricula(String matricula) {
         return alunoRespository.findByMatricula(matricula);
     }

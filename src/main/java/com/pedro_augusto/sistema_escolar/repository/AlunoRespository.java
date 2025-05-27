@@ -8,4 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface AlunoRespository extends JpaRepository<AlunoEntity, Long> {
+
+    Optional<AlunoEntity> findByMatricula(String matricula);
 }

@@ -1,10 +1,8 @@
 package com.pedro_augusto.sistema_escolar.swagger;
 
-import com.pedro_augusto.sistema_escolar.domain.AlunoEntity;
-import com.pedro_augusto.sistema_escolar.dtos.AlunoInformacoesDTO;
 import com.pedro_augusto.sistema_escolar.dtos.AlunoListagemDTO;
-import com.pedro_augusto.sistema_escolar.dtos.requests.AlunoPostRequestBody;
-import com.pedro_augusto.sistema_escolar.dtos.requests.AlunoPutRequestBody;
+import com.pedro_augusto.sistema_escolar.dtos.AlunoPostRequestDTO;
+import com.pedro_augusto.sistema_escolar.dtos.AlunoPutRequestAndDetailsDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,24 +23,14 @@ public interface AlunoControllerSwagger {
     ResponseEntity<List<AlunoListagemDTO>> findAll();
 
 
-    @Operation(summary = "Procura um aluno pelo ID", description = "Endpoint que recupera os dados de um aluno " +
-            "com base no id")
-    @ApiResponses(value = {
+    @Operation(summary = "Procura um aluno pela matrícula", description = "Endpoint que recupera os" +
+            "dados de um aluno com base no código da matrícula ")
+        @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Aluno encontrado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, aluno não encontrado")
     })
-    ResponseEntity<AlunoEntity> findById(@Parameter(description = "ID do aluno", example = "1, 2, 3",
-            required = true) @PathVariable("id") Long id);
-
-
-//    @Operation(summary = "Procura um aluno pelo número da matrícula", description = "Endpoint que recupera os" +
-//            "dados de um aluno com base no código da matrícula ")
-    //    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Aluno encontrado"),
-//            @ApiResponse(responseCode = "400", description = "Requisição Errada, aluno não encontrado")
-//    })
-//    ResponseEntity<AlunoInformacoesDTO> findByMatricula(@Parameter(description = "Combinação de caracteres para" +
-//    " matricula", required = true) @PathVariable("matricula")  numeroMatricula);
+    ResponseEntity<AlunoPutRequestAndDetailsDTO> findByMatricula(@Parameter(description = "Combinação de caracteres para" +
+    " matricula", required = true) @PathVariable("matricula") String matricula);
 
 
     @Operation(summary = "Cria um novo aluno", description = "Endpoint que cria um novo aluno com base nas" +
@@ -51,8 +39,8 @@ public interface AlunoControllerSwagger {
             @ApiResponse(responseCode = "201", description = "Aluno criado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada")
     })
-    ResponseEntity<AlunoInformacoesDTO> save(@RequestBody @Valid @Schema(description = "Informações do aluno"
-    ) AlunoPostRequestBody alunoPostRequestBody);
+    ResponseEntity<AlunoPostRequestDTO> save(@RequestBody @Valid @Schema(description = "Informações do aluno"
+    ) AlunoPostRequestDTO alunoPostRequestDTO);
 
 
     @Operation(summary = "Atualiza um aluno já existente", description = "Endpoint que modifica/atualiza" +
@@ -61,16 +49,15 @@ public interface AlunoControllerSwagger {
             @ApiResponse(responseCode = "200", description = "Aluno atualizado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, aluno não encontrado")
     })
-    ResponseEntity<AlunoEntity> replace(@RequestBody @Valid @Schema(description = "Informações do aluno"
-    ) AlunoPutRequestBody alunoPutRequestBody);
+    ResponseEntity<AlunoPutRequestAndDetailsDTO> replace(@RequestBody @Valid @Schema(description = "Informações do aluno"
+    ) AlunoPutRequestAndDetailsDTO alunoPutRequestAndDetailsDTO);
 
 
     @Operation(summary = "Deleta um aluno", description = "Deleta um aluno válido e existente com seus dados, atrvés" +
-            " do seu ID")
+            " da sua matricula")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Aluno encontrado e deletado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, aluno não encontrado")
     })
-    ResponseEntity<Void> delete(@PathVariable("id") @Parameter(description = "ID do aluno", example =
-            "1, 2, 3") Long id);
+    ResponseEntity<Void> delete(@PathVariable("id") @Parameter(description = "matricula do aluno") String matricula);
 }

@@ -1,8 +1,7 @@
 package com.pedro_augusto.sistema_escolar.controller;
 
+import com.pedro_augusto.sistema_escolar.dtos.ProfessorDTO;
 import com.pedro_augusto.sistema_escolar.dtos.ProfessorListagemDTO;
-import com.pedro_augusto.sistema_escolar.dtos.ProfessorPostRequestDTO;
-import com.pedro_augusto.sistema_escolar.dtos.ProfessorPutRequestAndDetailsDTO;
 import com.pedro_augusto.sistema_escolar.service.ProfessorService;
 import com.pedro_augusto.sistema_escolar.swagger.ProfessorControllerSwagger;
 import jakarta.validation.Valid;
@@ -35,27 +34,26 @@ public class ProfessorController implements ProfessorControllerSwagger {
     }
 
     @GetMapping(path = "/{matricula}")
-    public ResponseEntity<ProfessorPutRequestAndDetailsDTO> findByMatricula(@PathVariable("matricula") String matricula) {
+    public ResponseEntity<ProfessorDTO> findByMatricula(@PathVariable("matricula") String matricula) {
         log.info("GET /professores/{} - Buscando professor", matricula);
-        ProfessorPutRequestAndDetailsDTO professor = professorService.findByMatricula(matricula);
+        ProfessorDTO professor = professorService.findByMatricula(matricula);
         log.info("GET /professores/{} - Professor encontrado", matricula);
         return ResponseEntity.ok(professor);
     }
 
     @PostMapping
-    public ResponseEntity<ProfessorPostRequestDTO> save(@RequestBody @Valid ProfessorPostRequestDTO professorPostRequestDTO) {
-        log.info("POST /professores - Criando aluno {}", professorPostRequestDTO.getNome());
-        ProfessorPostRequestDTO professorSalvo = professorService.save(professorPostRequestDTO);
+    public ResponseEntity<ProfessorDTO> save(@RequestBody @Valid ProfessorDTO professorDTO) {
+        log.info("POST /professores - Criando aluno {}", professorDTO.getNome());
+        ProfessorDTO professorSalvo = professorService.save(professorDTO);
         log.info("POST /professores - Aluno {} criado", professorSalvo.getNome());
         return new ResponseEntity<>(professorSalvo, HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<ProfessorPutRequestAndDetailsDTO> replace(@RequestBody @Valid
-                                                                    ProfessorPutRequestAndDetailsDTO professorPutRequestAndDetailsDTO) {
+    public ResponseEntity<ProfessorDTO> replace(@RequestBody @Valid ProfessorDTO professorDTO) {
         log.info("PUT /professores - Atualizando professor com matricula {}",
-                professorPutRequestAndDetailsDTO.getMatricula());
-        ProfessorPutRequestAndDetailsDTO professorAtualizado = professorService.replace(professorPutRequestAndDetailsDTO);
+                professorDTO.getMatricula());
+        ProfessorDTO professorAtualizado = professorService.replace(professorDTO);
         log.info("PUT /professores - Aluno com matricula {} atualizado", professorAtualizado.getMatricula());
         return new ResponseEntity<>(professorAtualizado, HttpStatus.OK);
     }

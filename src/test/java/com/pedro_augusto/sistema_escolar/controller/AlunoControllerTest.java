@@ -1,8 +1,7 @@
 package com.pedro_augusto.sistema_escolar.controller;
 
+import com.pedro_augusto.sistema_escolar.dtos.AlunoDTO;
 import com.pedro_augusto.sistema_escolar.dtos.AlunoListagemDTO;
-import com.pedro_augusto.sistema_escolar.dtos.AlunoPostRequestDTO;
-import com.pedro_augusto.sistema_escolar.dtos.AlunoPutRequestAndDetailsDTO;
 import com.pedro_augusto.sistema_escolar.exceptions.BadRequestException;
 import com.pedro_augusto.sistema_escolar.service.AlunoService;
 import com.pedro_augusto.sistema_escolar.utils.AlunoCreator;
@@ -57,14 +56,14 @@ class AlunoControllerTest {
 
     @Test
     @DisplayName("findByMatricula retorna um aluno quando bem sucedido")
-    void findByMatricula_retornaAlunoPutRequestAndDetails_QuandoBemSucedido() {
+    void findByMatricula_retornaAlunoDTO_QuandoBemSucedido() {
         BDDMockito.when(alunoServiceMock.findByMatricula(ArgumentMatchers.anyString()))
-                .thenReturn(AlunoCreator.criarAlunoPutRequestAndDetailsDTOValido());
+                .thenReturn(AlunoCreator.criarAlunoDTOValido());
 
-        String matriculaEsperada = AlunoCreator.criarAlunoPutRequestAndDetailsDTOValido().getMatricula();
-        Long idEsperado = AlunoCreator.criarAlunoPutRequestAndDetailsDTOValido().getId();
+        String matriculaEsperada = AlunoCreator.criarAlunoDTOValido().getMatricula();
+        Long idEsperado = AlunoCreator.criarAlunoDTOValido().getId();
 
-        ResponseEntity<AlunoPutRequestAndDetailsDTO> aluno = alunoController.findByMatricula("SAA23042025000001");
+        ResponseEntity<AlunoDTO> aluno = alunoController.findByMatricula("SAA23042025000001");
 
         Assertions.assertThat(aluno.getBody()).isNotNull();
         Assertions.assertThat(aluno.getBody().getMatricula()).isEqualTo(matriculaEsperada);
@@ -84,41 +83,41 @@ class AlunoControllerTest {
 
     @Test
     @DisplayName("save retorna um aluno quando bem sucedido")
-    void save_retornaAlunoPostRequestBody_QuandoBemSucedido() {
-        BDDMockito.when(alunoServiceMock.save(ArgumentMatchers.any(AlunoPostRequestDTO.class)))
-                .thenReturn(AlunoCreator.criarAlunoPostRequestDTOValido());
+    void save_retornaAlunoDTO_QuandoBemSucedido() {
+        BDDMockito.when(alunoServiceMock.save(ArgumentMatchers.any(AlunoDTO.class)))
+                .thenReturn(AlunoCreator.criarAlunoDTOValido());
 
-        ResponseEntity<AlunoPostRequestDTO> aluno =
-                alunoController.save(AlunoCreator.criarAlunoPostRequestDTOValido());
+        ResponseEntity<AlunoDTO> aluno =
+                alunoController.save(AlunoCreator.criarAlunoDTOValido());
 
-        Assertions.assertThat(aluno.getBody()).isNotNull().isEqualTo(AlunoCreator.criarAlunoPostRequestDTOValido());
+        Assertions.assertThat(aluno.getBody()).isNotNull().isEqualTo(AlunoCreator.criarAlunoDTOValido());
         Assertions.assertThat(aluno.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
     @DisplayName("save retorna BadRequest quando nome null")
     void save_retornaBadRequest_QuandoNomeNull() {
-        AlunoPostRequestDTO alunoInvalido = AlunoCreator.criarAlunoPostRequestDTOValido();
+        AlunoDTO alunoInvalido = AlunoCreator.criarAlunoDTOValido();
         alunoInvalido.setNome(null);
 
-        BDDMockito.when(alunoServiceMock.save(ArgumentMatchers.any(AlunoPostRequestDTO.class)))
-                .thenThrow(new BadRequestException("Validation failed for object='alunoPostRequestBody'"));
+        BDDMockito.when(alunoServiceMock.save(ArgumentMatchers.any(AlunoDTO.class)))
+                .thenThrow(new BadRequestException("Validation failed for object='alunoDTO'"));
 
         Assertions.assertThatThrownBy(() -> alunoController.save(alunoInvalido)).isInstanceOf(BadRequestException.class)
-                .hasMessage("Validation failed for object='alunoPostRequestBody'");
+                .hasMessage("Validation failed for object='alunoDTO'");
     }
 
     @Test
     @DisplayName("replace atualiza um aluno quando bem sucedido")
-    void replace_retornaAlunoPutRequestAndDetails_QuandoBemSucedido() {
-        BDDMockito.when(alunoServiceMock.replace(ArgumentMatchers.any(AlunoPutRequestAndDetailsDTO.class)))
-                .thenReturn(AlunoCreator.criarAlunoPutRequestAndDetailsDTOValido());
+    void replace_retornaAlunoDTO_QuandoBemSucedido() {
+        BDDMockito.when(alunoServiceMock.replace(ArgumentMatchers.any(AlunoDTO.class)))
+                .thenReturn(AlunoCreator.criarAlunoDTOValido());
 
-        ResponseEntity<AlunoPutRequestAndDetailsDTO> aluno =
-                alunoController.replace(AlunoCreator.criarAlunoPutRequestAndDetailsDTOValido());
+        ResponseEntity<AlunoDTO> aluno =
+                alunoController.replace(AlunoCreator.criarAlunoDTOValido());
 
         Assertions.assertThat(aluno.getBody()).isNotNull().isEqualTo(
-                AlunoCreator.criarAlunoPutRequestAndDetailsDTOValido());
+                AlunoCreator.criarAlunoDTOValido());
         Assertions.assertThat(aluno.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 

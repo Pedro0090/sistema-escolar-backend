@@ -3,28 +3,22 @@ package com.pedro_augusto.sistema_escolar.dtos;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pedro_augusto.sistema_escolar.domain.enumerations.Sexo;
 import com.pedro_augusto.sistema_escolar.domain.enumerations.SituacaoMatricula;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class AlunoPutRequestAndDetailsDTO {
+public class ProfessorDTO {
 
     private Long id;
 
-    @Size(min = 3, message = "O nome não pode ter menos que 3 letras")
     @NotBlank(message = "Campo não pode ser vazio")
+    @Size(min = 3)
     private String nome;
 
     @NotBlank(message = "Campo não pode ser vazio")
@@ -32,38 +26,30 @@ public class AlunoPutRequestAndDetailsDTO {
     @CPF(message = "CPF inválido")
     private String cpf;
 
-    private String matricula;
-
-    @Pattern(regexp = "^\\(?\\d{2}\\)?\\s?9?\\d{4}-?\\d{4}$",
-            message = "Telefone inválido! Use o formato (99) 99999-9999")
-    @NotEmpty(message = "Campo não pode ser vazio")
-    private String telefone;
-
-    @Email(message = "Email inválido")
-    @NotBlank(message = "Campo não pode ser vazio")
-    private String email;
-
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @NotNull(message = "Campo não pode ser vazio")
-    private LocalDate dataNascimento;
-
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "Campo não pode ser vazio")
     private Sexo sexo;
 
-    @Size(min = 3, message = "O nome não pode ter menos que 3 letras")
-    @NotBlank(message = "Campo não pode ser vazio")
-    private String nomeMae;
+    @NotEmpty(message = "Campo não pode ser vazio")
+    @Pattern(regexp = "^\\(?\\d{2}\\)?\\s?9?\\d{4}-?\\d{4}$",
+            message = "Telefone inválido! Use o formato (99) 99999-9999")
+    private String telefone;
 
-    @Size(min = 3, message = "O nome não pode ter menos que 3 letras")
     @NotBlank(message = "Campo não pode ser vazio")
-    private String nomePai;
+    @Email
+    private String email;
 
-    @Enumerated(EnumType.STRING)
     @NotNull(message = "Campo não pode ser vazio")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dataNascimento;
+
+    private String matricula;
+
+    @NotNull(message = "Campo não pode ser vazio")
+    @Enumerated(EnumType.STRING)
     private SituacaoMatricula situacaoMatricula;
 
-    @NotBlank(message = "Campo inválido")
-    private String curso;
+    @NotNull(message = "Campo não pode ser nulo")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Salário não pode ser negativo")
+    private Double salario;
 }

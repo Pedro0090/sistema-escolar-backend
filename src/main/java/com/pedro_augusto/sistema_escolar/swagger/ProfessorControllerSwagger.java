@@ -28,7 +28,7 @@ public interface ProfessorControllerSwagger {
             @ApiResponse(responseCode = "200", description = "Professor encontrado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, professor não encontrado")
     })
-    ResponseEntity<ProfessorPutRequestAndDetailsDTO> findByMatricula(@Parameter(description = "Combinação de caracteres" +
+    ResponseEntity<ProfessorDTO> findByMatricula(@Parameter(description = "Combinação de caracteres" +
             " para matricula", required = true) @PathVariable("matricula") String matricula);
 
 
@@ -38,8 +38,8 @@ public interface ProfessorControllerSwagger {
             @ApiResponse(responseCode = "201", description = "Professor criado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada")
     })
-    ResponseEntity<ProfessorPostRequestDTO> save(@RequestBody @Valid @Schema(description = "Informações do professor"
-    ) ProfessorPostRequestDTO professorPostRequestDTO);
+    ResponseEntity<ProfessorDTO> save(@RequestBody @Valid @Schema(description = "Informações do professor"
+    ) ProfessorDTO professorDTO);
 
 
     @Operation(summary = "Atualiza um professor já existente", description = "Endpoint que modifica/atualiza" +
@@ -48,8 +48,8 @@ public interface ProfessorControllerSwagger {
             @ApiResponse(responseCode = "200", description = "Professor atualizado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, professor não encontrado")
     })
-    ResponseEntity<ProfessorPutRequestAndDetailsDTO> replace(@RequestBody @Valid @Schema(description = "Informações do" +
-    " professor") ProfessorPutRequestAndDetailsDTO professorPutRequestAndDetailsDTO);
+    ResponseEntity<ProfessorDTO> replace(@RequestBody @Valid @Schema(description = "Informações do" +
+    " professor") ProfessorDTO professorDTO);
 
 
     @Operation(summary = "Deleta um professor", description = "Deleta um professor válido e existente com seus dados, " +

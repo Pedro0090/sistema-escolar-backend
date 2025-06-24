@@ -20,7 +20,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AlunoPostRequestDTO {
+public class AlunoDTO {
+
+    private Long id;
 
     @Size(min = 3, message = "O nome não pode ter menos que 3 letras")
     @NotBlank(message = "Campo não pode ser vazio")
@@ -31,6 +33,8 @@ public class AlunoPostRequestDTO {
     @Size(min = 11, max = 11)
     @CPF(message = "CPF inválido")
     private String cpf;
+
+    private String matricula;
 
     @Schema(example = "(00) 00000-0000")
     @Pattern(regexp = "^\\(?\\d{2}\\)?\\s?9?\\d{4}-?\\d{4}$",

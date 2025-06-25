@@ -1,9 +1,10 @@
 package com.pedro_augusto.sistema_escolar.controller;
 
 import com.pedro_augusto.sistema_escolar.domain.EnderecoEntity;
-import com.pedro_augusto.sistema_escolar.dtos.EnderecoPostRequestDTO;
-import com.pedro_augusto.sistema_escolar.dtos.EnderecoPutRequestAndDetailsDTO;
+import com.pedro_augusto.sistema_escolar.dtos.EnderecoDTO;
+import com.pedro_augusto.sistema_escolar.dtos.EnderecoListagemDTO;
 import com.pedro_augusto.sistema_escolar.service.EnderecoService;
+import com.pedro_augusto.sistema_escolar.swagger.EnderecoControllerSwagger;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/enderecos")
 @Log4j2
-public class EnderecoController {
+public class EnderecoController implements EnderecoControllerSwagger {
 
     private final EnderecoService enderecoService;
 
@@ -26,35 +27,35 @@ public class EnderecoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EnderecoEntity>> findAll() {
+    public ResponseEntity<List<EnderecoListagemDTO>> findAll() {
         log.info("GET /enderecos - Listando todos os endereços");
-        List<EnderecoEntity> listaEnderecos = enderecoService.listAll();
+        List<EnderecoListagemDTO> listaEnderecos = enderecoService.listAll();
         log.info("GET /enderecos - {} endereços encontrados", listaEnderecos.size());
         return ResponseEntity.ok(listaEnderecos);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<EnderecoPutRequestAndDetailsDTO> findByMatricula(@PathVariable("id") Long id) {
+    public ResponseEntity<EnderecoDTO> findById(@PathVariable("id") Long id) {
         log.info("GET /enderecos/{} - Buscando endereço", id);
-        EnderecoPutRequestAndDetailsDTO endereco = enderecoService.findById(id);
+        EnderecoDTO endereco = enderecoService.findById(id);
         log.info("GET /enderecos/{} - Endereço encontrado", id);
         return ResponseEntity.ok(endereco);
     }
 
     @PostMapping
-    public ResponseEntity<EnderecoPostRequestDTO> save(@RequestBody @Valid EnderecoPostRequestDTO enderecoPostRequestDTO) {
+    public ResponseEntity<EnderecoDTO> save(@RequestBody @Valid EnderecoDTO enderecoDTO) {
         log.info("POST /enderecos - Criando endereço");
-        EnderecoPostRequestDTO endereco = enderecoService.save(enderecoPostRequestDTO);
+        EnderecoDTO endereco = enderecoService.save(enderecoDTO);
         log.info("POST /enderecos - endereco criado");
         return new ResponseEntity<>(endereco, HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<EnderecoPutRequestAndDetailsDTO> replace(@RequestBody @Valid EnderecoPutRequestAndDetailsDTO
-                                                                               enderecoPutRequestAndDetailsDTO) {
+    public ResponseEntity<EnderecoDTO> replace(@RequestBody @Valid EnderecoDTO
+                                                       enderecoDTO) {
         log.info("PUT /enderecos - Atualizando endereco com id {}",
-                enderecoPutRequestAndDetailsDTO.getId());
-        EnderecoPutRequestAndDetailsDTO enderecoAtualizado = enderecoService.replace(enderecoPutRequestAndDetailsDTO);
+                enderecoDTO.getId());
+        EnderecoDTO enderecoAtualizado = enderecoService.replace(enderecoDTO);
         log.info("PUT /enderecos - Endereço com id {} atualizado", enderecoAtualizado.getId());
         return new ResponseEntity<>(enderecoAtualizado, HttpStatus.OK);
     }

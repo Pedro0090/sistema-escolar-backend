@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class EnderecoPutRequestAndDetailsDTO {
+public class EnderecoDTO {
 
     private Long id;
 

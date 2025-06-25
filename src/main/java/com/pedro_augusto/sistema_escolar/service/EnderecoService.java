@@ -4,9 +4,8 @@ import com.pedro_augusto.sistema_escolar.component.AlunoComponent;
 import com.pedro_augusto.sistema_escolar.component.EnderecoComponent;
 import com.pedro_augusto.sistema_escolar.domain.AlunoEntity;
 import com.pedro_augusto.sistema_escolar.domain.EnderecoEntity;
-import com.pedro_augusto.sistema_escolar.dtos.AlunoPutRequestAndDetailsDTO;
-import com.pedro_augusto.sistema_escolar.dtos.EnderecoPostRequestDTO;
-import com.pedro_augusto.sistema_escolar.dtos.EnderecoPutRequestAndDetailsDTO;
+import com.pedro_augusto.sistema_escolar.dtos.EnderecoDTO;
+import com.pedro_augusto.sistema_escolar.dtos.EnderecoListagemDTO;
 import com.pedro_augusto.sistema_escolar.exceptions.BadRequestException;
 import com.pedro_augusto.sistema_escolar.mapper.EnderecoMapper;
 import lombok.extern.log4j.Log4j2;
@@ -30,39 +29,39 @@ public class EnderecoService {
         this.alunoComponent = alunoComponent;
     }
 
-    public List<EnderecoEntity> listAll() {
+    public List<EnderecoListagemDTO> listAll() {
         log.info("Buscando endereços no banco de dados");
-        List<EnderecoEntity> enderecos = enderecoComponent.findAll();
+        List<EnderecoListagemDTO> enderecos = enderecoMapper.toListEnderecoListagemDTO(enderecoComponent.findAll());
         log.info("{} endereços encontrados", enderecos.size());
         return enderecos;
     }
 
-    public EnderecoPutRequestAndDetailsDTO findById(Long id) {
+    public EnderecoDTO findById(Long id) {
         log.info("Buscando endereco com id {}", id);
         EnderecoEntity endereco = enderecoComponent.findById(id)
                 .orElseThrow(() -> new BadRequestException("Endereço não encontrado"));
         log.info("Endereço com id {} encontrado", id);
-        return enderecoMapper.toEnderecoPutRequestAndDetailsDTO(endereco);
+        return enderecoMapper.toEnderecoDTO(endereco);
     }
 
-    public EnderecoPostRequestDTO save(EnderecoPostRequestDTO enderecoPostRequestDTO) {
+    public EnderecoDTO save(EnderecoDTO enderecoDTO) {
         log.info("Criando endereco no banco de dados");
-        AlunoEntity alunoSalvo = alunoComponent.findById(enderecoPostRequestDTO.getAlunoId());
-        EnderecoEntity enderecoEntity = enderecoMapper.toEnderecoEntity(enderecoPostRequestDTO, alunoSalvo);
+        AlunoEntity alunoSalvo = alunoComponent.findById(enderecoDTO.getAlunoId());
+        EnderecoEntity enderecoEntity = enderecoMapper.toEnderecoEntity(enderecoDTO, alunoSalvo);
         EnderecoEntity enderecoSalvo = enderecoComponent.salvar(enderecoEntity);
         log.info("Endereco salvo no banco de dados");
-        return enderecoMapper.toEnderecoPostRequestDTO(enderecoSalvo);
+        return enderecoMapper.toEnderecoDTO(enderecoSalvo);
     }
 
-    public EnderecoPutRequestAndDetailsDTO replace(EnderecoPutRequestAndDetailsDTO enderecoPutRequestAndDetailsDTO) {
-        log.info("Buscando endereço com id {} no banco de dados", enderecoPutRequestAndDetailsDTO.getId());
-        enderecoComponent.findById(enderecoPutRequestAndDetailsDTO.getId());
-        AlunoEntity alunoSalvo = alunoComponent.findById(enderecoPutRequestAndDetailsDTO.getAlunoId());
+    public EnderecoDTO replace(EnderecoDTO enderecoDTO) {
+        log.info("Buscando endereço com id {} no banco de dados", enderecoDTO.getId());
+        enderecoComponent.findById(enderecoDTO.getId());
+        AlunoEntity alunoSalvo = alunoComponent.findById(enderecoDTO.getAlunoId());
         EnderecoEntity enderecoAtualizado = enderecoComponent.salvar(
-                enderecoMapper.toEnderecoEntity(enderecoPutRequestAndDetailsDTO, alunoSalvo)
+                enderecoMapper.toEnderecoEntity(enderecoDTO, alunoSalvo)
         );
         log.info("Endereço com id {} atualizado", enderecoAtualizado.getId());
-        return enderecoMapper.toEnderecoPutRequestAndDetailsDTO(enderecoAtualizado);
+        return enderecoMapper.toEnderecoDTO(enderecoAtualizado);
     }
 
     public void delete(Long id) {

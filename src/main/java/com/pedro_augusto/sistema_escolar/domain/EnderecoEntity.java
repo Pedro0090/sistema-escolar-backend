@@ -30,7 +30,7 @@ public class EnderecoEntity {
     @Column(name = "NUMERO", nullable = false)
     private String numero;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_ALUNO")
     private AlunoEntity aluno;
 }

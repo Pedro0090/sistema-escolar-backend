@@ -12,7 +12,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
         ),
         tags = {@Tag(name = "Aluno", description = "Operações relacionadas ao Aluno"),
                 @Tag(name = "Professor", description = "Operações relacionadas ao Professor"),
-                @Tag(name= "Endereco", description = "Operações relacionadas ao Endereco")}
+                @Tag(name= "Endereco", description = "Operações relacionadas ao Endereco"),
+                @Tag(name= "Disciplina", description = "Operações relacionadas a Disciplina")}
 )
 public class SpringDocConfiguration {
 }

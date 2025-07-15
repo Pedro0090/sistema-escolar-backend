@@ -23,6 +23,10 @@ public class ProfessorComponent {
         return professorRepository.findAll();
     }
 
+    public ProfessorEntity findById(Long id) {
+        return professorRepository.findById(id).orElseThrow(() -> new BadRequestException("Professor não encontrado"));
+    }
+
     public Optional<ProfessorEntity> findByMatricula(String matricula) {
         return professorRepository.findByMatricula(matricula);
     }

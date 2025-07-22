@@ -1,4 +1,4 @@
-package com.pedro_augusto.sistema_escolar.dtos.requests;
+package com.pedro_augusto.sistema_escolar.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pedro_augusto.sistema_escolar.domain.enumerations.Sexo;
@@ -20,7 +20,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AlunoPostRequestBody {
+public class AlunoDTO {
+
+    private Long id;
 
     @Size(min = 3, message = "O nome não pode ter menos que 3 letras")
     @NotBlank(message = "Campo não pode ser vazio")

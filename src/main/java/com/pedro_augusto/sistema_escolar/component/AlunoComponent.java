@@ -27,21 +27,22 @@ public class AlunoComponent {
         return alunoRespository.findById(id).orElseThrow(() -> new BadRequestException("Aluno não encontrado"));
     }
 
-    public AlunoEntity adicionarMatricula(AlunoEntity alunoEntity, String matricula) {
+    public Optional<AlunoEntity> findByMatricula(String matricula) {
+        return alunoRespository.findByMatricula(matricula);
+    }
+
+    public AlunoEntity adicionarMatriculaAndSalvar(AlunoEntity alunoEntity, String matricula) {
         alunoEntity.setMatricula(matricula);
-        return alunoEntity;
+        return salvar(alunoEntity);
     }
 
     public AlunoEntity salvar(AlunoEntity alunoEntity) {
         return alunoRespository.save(alunoEntity);
     }
 
-    public void deletar(Long id) {
-        alunoRespository.delete(findById(id));
+    public void deletar(String matricula) {
+        AlunoEntity aluno = findByMatricula(matricula)
+                .orElseThrow(() -> new BadRequestException("Aluno não encontrado"));
+        alunoRespository.delete(aluno);
     }
-
-//    public AlunoEntity findByMatricula(String matricula) {
-//        return Optional.ofNullable(alunoRespository.findByMatricula(matricula))
-//                .orElseThrow(() -> new BadRequestException("Aluno não encontrado"));
-//    }
 }

@@ -10,7 +10,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
                 title = "Sistema Escolar Documentação",
                 description = "Documentação do mini sistema escolar"
         ),
-        tags = {@Tag(name = "Aluno", description = "Operações relacionadas ao Aluno")}
+        tags = {@Tag(name = "Aluno", description = "Operações relacionadas ao Aluno"),
+                @Tag(name = "Professor", description = "Operações relacionadas ao Professor"),
+                @Tag(name= "Endereco", description = "Operações relacionadas ao Endereco")}
 )
 public class SpringDocConfiguration {
 }

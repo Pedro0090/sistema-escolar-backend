@@ -2,19 +2,17 @@ package com.pedro_augusto.sistema_escolar.service;
 
 import com.pedro_augusto.sistema_escolar.component.AlunoComponent;
 import com.pedro_augusto.sistema_escolar.domain.AlunoEntity;
-import com.pedro_augusto.sistema_escolar.dtos.AlunoInformacoesDTO;
+import com.pedro_augusto.sistema_escolar.dtos.AlunoDTO;
 import com.pedro_augusto.sistema_escolar.dtos.AlunoListagemDTO;
-import com.pedro_augusto.sistema_escolar.dtos.requests.AlunoPostRequestBody;
-import com.pedro_augusto.sistema_escolar.dtos.requests.AlunoPutRequestBody;
+import com.pedro_augusto.sistema_escolar.exceptions.BadRequestException;
 import com.pedro_augusto.sistema_escolar.mapper.AlunoMapper;
+import com.pedro_augusto.sistema_escolar.utils.GeradorMatricula;
+import com.pedro_augusto.sistema_escolar.utils.TipoMatricula;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Random;
 
 @Service
 @Log4j2
@@ -36,48 +34,42 @@ public class AlunoService {
         return alunos;
     }
 
-    public AlunoEntity findById(Long id) {
-        log.info("Buscando aluno com id {}", id);
-        AlunoEntity aluno = alunoComponent.findById(id);
-        log.info("Aluno com id {} encontrado", id);
-        return aluno;
+    public AlunoDTO findByMatricula(String matricula) {
+        log.info("Buscando aluno com matricula {}", matricula);
+        AlunoEntity aluno = alunoComponent.findByMatricula(matricula)
+                .orElseThrow(() -> new BadRequestException("Aluno não encontrado"));
+        log.info("Aluno com matricula {} encontrado", matricula);
+        return alunoMapper.toAlunoDTO(aluno);
     }
 
-//    public AlunoInformacoesDTO findByMatricula(String matricula) {
-//        return alunoMapper.toAlunoInformacoesDTO(alunoComponent.findByMatricula(matricula));
-//    }
-
-    public AlunoInformacoesDTO save(AlunoPostRequestBody alunoPostRequestBody) {
-        log.info("Criando aluno {} no banco de dados", alunoPostRequestBody.getNome());
-        AlunoEntity alunoEntity = alunoMapper.toAluno(alunoPostRequestBody);
-        AlunoEntity alunoEntitySalvo = alunoComponent.salvar(
-                alunoComponent.adicionarMatricula(alunoEntity, gerarMatriculaAluno()));
+    public AlunoDTO save(AlunoDTO alunoDTO) {
+        log.info("Criando aluno {} no banco de dados", alunoDTO.getNome());
+        AlunoEntity alunoEntity = alunoMapper.toAluno(alunoDTO);
+        AlunoEntity alunoEntitySalvo =  alunoComponent.adicionarMatriculaAndSalvar(alunoEntity, gerarMatriculaValidaAluno());
         log.info("Aluno {} salvo no banco de dados", alunoEntitySalvo.getNome());
-        return alunoMapper.toAlunoInformacoesDTO(alunoEntitySalvo);
+        return alunoMapper.toAlunoDTO(alunoEntitySalvo);
     }
 
-    public AlunoEntity replace(AlunoPutRequestBody alunoPutRequestBody) {
-        log.info("Buscando aluno com id {} no banco de dados", alunoPutRequestBody.getId());
-        alunoComponent.findById(alunoPutRequestBody.getId());
-        AlunoEntity alunoAtualizado = alunoComponent.salvar(alunoMapper.toAluno(alunoPutRequestBody));
-        log.info("Aluno com id {} atualizado", alunoAtualizado.getId());
-        return alunoAtualizado;
+    public AlunoDTO replace(AlunoDTO alunoDTO) {
+        log.info("Buscando aluno com matricula {} no banco de dados", alunoDTO.getMatricula());
+        alunoComponent.findByMatricula(alunoDTO.getMatricula());
+        AlunoEntity alunoAtualizado = alunoComponent.salvar(
+                alunoMapper.toAluno(alunoDTO));
+        log.info("Aluno com matricula {} atualizado", alunoAtualizado.getMatricula());
+        return alunoMapper.toAlunoDTO(alunoAtualizado);
     }
 
-    public void delete(Long id) {
-        log.info("Deletando usuário com id {}", id);
-        alunoComponent.deletar(id);
-        log.info("Aluno com id {} deletado", id);
+    public void delete(String matricula) {
+        log.info("Deletando usuário com matricula {}", matricula);
+        alunoComponent.deletar(matricula);
+        log.info("Aluno com matricula {} deletado", matricula);
     }
 
-
-
-    public String gerarMatriculaAluno() {
-        StringBuilder matricula = new StringBuilder("SAA");
-        LocalDate data = LocalDate.now();
-        matricula.append(data.format(DateTimeFormatter.ofPattern("ddMMyyyy")));
-        long numero = new Random().nextLong(1, 999999);
-        matricula.append(String.format("%06d", numero));
-        return matricula.toString();
+    private String gerarMatriculaValidaAluno() {
+        String matricula;
+        do {
+            matricula = GeradorMatricula.gerarMatricula(TipoMatricula.ALUNO);
+        } while (alunoComponent.findByMatricula(matricula).isPresent());
+        return matricula;
     }
 }

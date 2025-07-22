@@ -58,5 +58,5 @@ public interface AlunoControllerSwagger {
             @ApiResponse(responseCode = "204", description = "Aluno encontrado e deletado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, aluno não encontrado")
     })
-    ResponseEntity<Void> delete(@PathVariable("id") @Parameter(description = "matricula do aluno") String matricula);
+    ResponseEntity<Void> delete(@PathVariable("matricula") @Parameter(description = "matricula do aluno") String matricula);
 }

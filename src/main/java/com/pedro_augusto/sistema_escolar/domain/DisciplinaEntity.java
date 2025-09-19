@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "disciplina")
 @NoArgsConstructor
@@ -26,4 +29,7 @@ public class DisciplinaEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_PROFESSOR")
     private ProfessorEntity professor;
+
+    @OneToMany(mappedBy = "disciplinaEntity")
+    private List<AlunoDisciplinaEntity> alunos = new ArrayList<>();
 }

@@ -23,8 +23,8 @@ public class DisciplinaComponent {
         return disciplinaRepository.findAll();
     }
 
-    public Optional<DisciplinaEntity> findById(Long id) {
-        return disciplinaRepository.findById(id);
+    public DisciplinaEntity findById(Long id) {
+        return disciplinaRepository.findById(id).orElseThrow(() -> new BadRequestException("Disciplina não encontrada"));
     }
 
     public DisciplinaEntity salvar(DisciplinaEntity disciplinaEntity) {
@@ -32,7 +32,7 @@ public class DisciplinaComponent {
     }
 
     public void deletar(Long id) {
-        DisciplinaEntity disciplina = findById(id).orElseThrow(() -> new BadRequestException("Disciplina não encontrada"));
+        DisciplinaEntity disciplina = findById(id);
         disciplinaRepository.delete(disciplina);
     }
 }

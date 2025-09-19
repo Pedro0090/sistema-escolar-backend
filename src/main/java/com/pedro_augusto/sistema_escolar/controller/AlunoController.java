@@ -2,6 +2,7 @@ package com.pedro_augusto.sistema_escolar.controller;
 
 import com.pedro_augusto.sistema_escolar.dtos.AlunoDTO;
 import com.pedro_augusto.sistema_escolar.dtos.AlunoListagemDTO;
+import com.pedro_augusto.sistema_escolar.dtos.DisciplinaDTO;
 import com.pedro_augusto.sistema_escolar.service.AlunoService;
 import com.pedro_augusto.sistema_escolar.swagger.AlunoControllerSwagger;
 import jakarta.validation.Valid;
@@ -32,6 +33,14 @@ public class AlunoController implements AlunoControllerSwagger {
         List<AlunoListagemDTO> alunos = alunoService.listAll();
         log.info("GET /alunos - {} alunos encontrados", alunos.size());
         return ResponseEntity.ok(alunos);
+    }
+
+    @GetMapping(path = "/{matricula}/disciplinas")
+    public ResponseEntity<List<DisciplinaDTO>> findAllDisciplinas(@PathVariable("matricula") String matricula) {
+        log.info("GET /{matricula}/disciplinas - Listando todas as disciplinas do aluno");
+        List<DisciplinaDTO> disciplinas = alunoService.listAllDisciplinas(matricula);
+        log.info("GET /{matricula}/disciplinas - {} disciplinas encontrados", disciplinas.size());
+        return ResponseEntity.ok(disciplinas);
     }
 
     @GetMapping(path = "/{matricula}")

@@ -42,7 +42,7 @@ public class DisciplinaController {
     @PutMapping
     public ResponseEntity<DisciplinaDTO> replace(@RequestBody @Valid DisciplinaDTO disciplinaDTO) {
         DisciplinaDTO disciplina = disciplinaService.replace(disciplinaDTO);
-        return new ResponseEntity<>(disciplina, HttpStatus.CREATED);
+        return new ResponseEntity<>(disciplina, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")

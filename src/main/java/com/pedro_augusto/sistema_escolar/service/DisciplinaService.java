@@ -31,8 +31,7 @@ public class DisciplinaService {
     }
 
     public DisciplinaDTO findById(Long id) {
-        DisciplinaEntity disciplina = disciplinaComponent.findById(id).orElseThrow(
-                () -> new BadRequestException("Disciplina não encontrada"));
+        DisciplinaEntity disciplina = disciplinaComponent.findById(id);
         return disciplinaMapper.toDisciplinaDTO(disciplina);
     }
 
@@ -40,7 +39,7 @@ public class DisciplinaService {
         ProfessorEntity professorSalvo = professorComponent.findById(disciplinaDTO.getProfessorId());
         DisciplinaEntity disciplinaEntity = disciplinaMapper.toDisciplinaEntity(disciplinaDTO, professorSalvo);
         DisciplinaEntity disciplinaSalva = disciplinaComponent.salvar(disciplinaEntity);
-        return disciplinaMapper.toDisciplinaDTO(disciplinaEntity);
+        return disciplinaMapper.toDisciplinaDTO(disciplinaSalva);
     }
 
     public DisciplinaDTO replace(DisciplinaDTO disciplinaDTO) {

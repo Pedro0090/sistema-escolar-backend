@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "aluno")
@@ -59,6 +61,12 @@ public class AlunoEntity {
 
     @Column(name = "CURSO")
     private String curso;
+
+    @OneToMany(mappedBy = "aluno")
+    private List<EnderecoEntity> enderecos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "alunoEntity")
+    private List<AlunoDisciplinaEntity> disciplinas = new ArrayList<>();
 
     public void setNome(String nome) {
         this.nome = nome != null ? nome.trim() : null;

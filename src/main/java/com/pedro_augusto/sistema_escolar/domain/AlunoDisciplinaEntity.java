@@ -1,12 +1,14 @@
 package com.pedro_augusto.sistema_escolar.domain;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "rel_alun_disc")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class AlunoDisciplinaEntity {
 

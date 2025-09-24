@@ -2,8 +2,9 @@ package com.pedro_augusto.sistema_escolar.domain;
 
 import com.pedro_augusto.sistema_escolar.domain.enumerations.SituacaoDisciplina;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,8 @@ import java.util.List;
 @Entity
 @Table(name = "disciplina")
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class DisciplinaEntity {
 
     @Id

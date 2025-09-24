@@ -3,15 +3,18 @@ package com.pedro_augusto.sistema_escolar.dtos;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pedro_augusto.sistema_escolar.domain.enumerations.Sexo;
 import com.pedro_augusto.sistema_escolar.domain.enumerations.SituacaoMatricula;
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class ProfessorDTO {
 

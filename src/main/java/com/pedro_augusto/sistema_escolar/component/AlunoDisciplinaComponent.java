@@ -29,6 +29,11 @@ public class AlunoDisciplinaComponent {
                 () -> new BadRequestException("Relacionamento não encontrado"));
     }
 
+    public AlunoDisciplinaEntity findByIdAlunoAndIdDisciplina(Long idAluno, Long idDisciplina) {
+        return alunoDisciplinaRepository.findByAlunoEntityIdAndDisciplinaEntityId(idAluno, idDisciplina).orElseThrow(
+                () -> new BadRequestException("Relacionamento não encontrado"));
+    }
+
     public AlunoDisciplinaEntity salvar(AlunoDisciplinaEntity alunoDisciplinaEntity) {
         return alunoDisciplinaRepository.save(alunoDisciplinaEntity);
     }

@@ -74,4 +74,11 @@ public class AlunoController implements AlunoControllerSwagger {
         log.info("DELETE /alunos/{} - Aluno deletado", matricula);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping(path = "/{matricula}/disciplinas/{id}" )
+    public ResponseEntity<Void> removeDisciplina(@PathVariable("matricula") String matricula,
+                                                 @PathVariable("id") Long id) {
+        alunoService.deleteDisciplina(matricula, id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

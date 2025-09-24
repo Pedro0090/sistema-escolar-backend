@@ -2,11 +2,13 @@ package com.pedro_augusto.sistema_escolar.dtos;
 
 import com.pedro_augusto.sistema_escolar.domain.enumerations.SituacaoMatricula;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class AlunoListagemDTO {
 

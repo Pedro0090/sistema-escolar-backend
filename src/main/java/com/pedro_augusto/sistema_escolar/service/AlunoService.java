@@ -7,7 +7,6 @@ import com.pedro_augusto.sistema_escolar.domain.AlunoDisciplinaEntity;
 import com.pedro_augusto.sistema_escolar.domain.AlunoEntity;
 import com.pedro_augusto.sistema_escolar.domain.DisciplinaEntity;
 import com.pedro_augusto.sistema_escolar.dtos.AlunoDTO;
-import com.pedro_augusto.sistema_escolar.dtos.AlunoDisciplinaDTO;
 import com.pedro_augusto.sistema_escolar.dtos.AlunoListagemDTO;
 import com.pedro_augusto.sistema_escolar.dtos.DisciplinaDTO;
 import com.pedro_augusto.sistema_escolar.exceptions.BadRequestException;
@@ -21,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Log4j2
@@ -88,17 +88,22 @@ public class AlunoService {
         log.info("Buscando aluno com matricula {} no banco de dados", alunoDTO.getMatricula());
         alunoComponent.findByMatricula(alunoDTO.getMatricula());
         List<DisciplinaEntity> disciplinas = new ArrayList<>();
-        if (!alunoDTO.getDisciplinas().isEmpty() && alunoDTO.getDisciplinas() != null) {
+        if (alunoDTO.getDisciplinas() != null && !alunoDTO.getDisciplinas().isEmpty()) {
             for (Long id : alunoDTO.getDisciplinas()) {
                 DisciplinaEntity disciplina = disciplinaComponent.findById(id);
                 disciplinas.add(disciplina);
             }
         }
-        AlunoEntity alunoAtualizado = alunoComponent.salvar(
-                alunoMapper.toAluno(alunoDTO));
+        AlunoEntity alunoAtualizado = alunoMapper.toAluno(alunoDTO);
         for (DisciplinaEntity disciplina : disciplinas) {
-            alunoDisciplinaComponent.setarAndSalvar(alunoAtualizado, disciplina);
+            boolean jaExiste = disciplina.getAlunos().stream()
+                    .anyMatch(rel -> rel.getAlunoEntity().getId().equals(alunoAtualizado.getId()));
+
+            if (!jaExiste) {
+                alunoDisciplinaComponent.setarAndSalvar(alunoAtualizado, disciplina);
+            }
         }
+        alunoComponent.salvar(alunoAtualizado);
         log.info("Aluno com matricula {} atualizado", alunoAtualizado.getMatricula());
         return alunoMapper.toAlunoDTO(alunoAtualizado);
     }
@@ -107,6 +112,13 @@ public class AlunoService {
         log.info("Deletando usuário com matricula {}", matricula);
         alunoComponent.deletar(matricula);
         log.info("Aluno com matricula {} deletado", matricula);
+    }
+
+    public void deleteDisciplina(String matricula, Long id) {
+        Optional<AlunoEntity> aluno = alunoComponent.findByMatricula(matricula);
+        disciplinaComponent.findById(id);
+        AlunoDisciplinaEntity relacionamento = alunoDisciplinaComponent.findByIdAlunoAndIdDisciplina(aluno.get().getId(), id);
+        alunoDisciplinaComponent.deletar(relacionamento);
     }
 
     private String gerarMatriculaValidaAluno() {

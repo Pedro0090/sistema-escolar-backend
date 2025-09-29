@@ -29,7 +29,7 @@ public interface AlunoControllerSwagger {
             @ApiResponse(responseCode = "400", description = "Requisição Errada, aluno não encontrado")
     })
     ResponseEntity<AlunoDTO> findByMatricula(@Parameter(description = "Combinação de caracteres para" +
-    " matricula", required = true) @PathVariable("matricula") String matricula);
+    " matricula", required = true) String matricula);
 
 
     @Operation(summary = "Cria um novo aluno", description = "Endpoint que cria um novo aluno com base nas" +
@@ -38,7 +38,7 @@ public interface AlunoControllerSwagger {
             @ApiResponse(responseCode = "201", description = "Aluno criado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada")
     })
-    ResponseEntity<AlunoDTO> save(@RequestBody @Valid @Schema(description = "Informações do aluno"
+    ResponseEntity<AlunoDTO> save(@Schema(description = "Informações do aluno"
     ) AlunoDTO alunoDTO);
 
 
@@ -48,7 +48,7 @@ public interface AlunoControllerSwagger {
             @ApiResponse(responseCode = "200", description = "Aluno atualizado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, aluno não encontrado")
     })
-    ResponseEntity<AlunoDTO> replace(@RequestBody @Valid @Schema(description = "Informações do aluno"
+    ResponseEntity<AlunoDTO> replace(@Schema(description = "Informações do aluno"
     ) AlunoDTO alunoDTO);
 
 
@@ -58,5 +58,5 @@ public interface AlunoControllerSwagger {
             @ApiResponse(responseCode = "204", description = "Aluno encontrado e deletado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, aluno não encontrado")
     })
-    ResponseEntity<Void> delete(@PathVariable("matricula") @Parameter(description = "matricula do aluno") String matricula);
+    ResponseEntity<Void> delete(@Parameter(description = "matricula do aluno") String matricula);
 }

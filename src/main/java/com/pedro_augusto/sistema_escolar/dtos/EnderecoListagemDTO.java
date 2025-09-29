@@ -1,8 +1,10 @@
 package com.pedro_augusto.sistema_escolar.dtos;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class EnderecoListagemDTO {
 
     private Long id;

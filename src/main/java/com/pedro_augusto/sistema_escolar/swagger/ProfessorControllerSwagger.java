@@ -29,7 +29,7 @@ public interface ProfessorControllerSwagger {
             @ApiResponse(responseCode = "400", description = "Requisição Errada, professor não encontrado")
     })
     ResponseEntity<ProfessorDTO> findByMatricula(@Parameter(description = "Combinação de caracteres" +
-            " para matricula", required = true) @PathVariable("matricula") String matricula);
+            " para matricula", required = true) String matricula);
 
 
     @Operation(summary = "Cria um novo professor", description = "Endpoint que cria um novo professor com base nas" +
@@ -38,7 +38,7 @@ public interface ProfessorControllerSwagger {
             @ApiResponse(responseCode = "201", description = "Professor criado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada")
     })
-    ResponseEntity<ProfessorDTO> save(@RequestBody @Valid @Schema(description = "Informações do professor"
+    ResponseEntity<ProfessorDTO> save(@Schema(description = "Informações do professor"
     ) ProfessorDTO professorDTO);
 
 
@@ -48,7 +48,7 @@ public interface ProfessorControllerSwagger {
             @ApiResponse(responseCode = "200", description = "Professor atualizado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, professor não encontrado")
     })
-    ResponseEntity<ProfessorDTO> replace(@RequestBody @Valid @Schema(description = "Informações do" +
+    ResponseEntity<ProfessorDTO> replace(@Schema(description = "Informações do" +
     " professor") ProfessorDTO professorDTO);
 
 
@@ -58,5 +58,5 @@ public interface ProfessorControllerSwagger {
             @ApiResponse(responseCode = "204", description = "Professor encontrado e deletado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, professor não encontrado")
     })
-    ResponseEntity<Void> delete(@PathVariable("id") @Parameter(description = "matricula do professor") String matricula);
+    ResponseEntity<Void> delete(@Parameter(description = "matricula do professor") String matricula);
 }

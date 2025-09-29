@@ -5,14 +5,18 @@ import com.pedro_augusto.sistema_escolar.domain.enumerations.Sexo;
 import com.pedro_augusto.sistema_escolar.domain.enumerations.SituacaoMatricula;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "professor")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfessorEntity {
@@ -51,6 +55,9 @@ public class ProfessorEntity {
 
     @Column(name = "SALARIO")
     private Double salario;
+
+    @OneToMany(mappedBy = "professor", fetch = FetchType.LAZY)
+    private List<DisciplinaEntity> disciplinas = new ArrayList<>();
 
     public void setNome(String nome) {
         this.nome = nome != null ? nome.trim() : null;

@@ -30,7 +30,7 @@ public interface EnderecoControllerSwagger {
             @ApiResponse(responseCode = "400", description = "Requisição Errada, endereco não encontrado")
     })
     ResponseEntity<EnderecoDTO> findById(@Parameter(description = "ID do endereco", example = "1, 2, 3",
-            required = true) @PathVariable("id") Long id);
+            required = true) Long id);
 
 
     @Operation(summary = "Cria um novo endereco", description = "Endpoint que cria um novo endereco com base nas" +
@@ -39,7 +39,7 @@ public interface EnderecoControllerSwagger {
             @ApiResponse(responseCode = "201", description = "Endereco criado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada")
     })
-    ResponseEntity<EnderecoDTO> save(@RequestBody @Valid @Schema(description = "Informações do endereco"
+    ResponseEntity<EnderecoDTO> save(@Schema(description = "Informações do endereco"
     ) EnderecoDTO enderecoDTO);
 
 
@@ -49,7 +49,7 @@ public interface EnderecoControllerSwagger {
             @ApiResponse(responseCode = "200", description = "Endereco atualizado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, endereco não encontrado")
     })
-    ResponseEntity<EnderecoDTO> replace(@RequestBody @Valid @Schema(description = "Informações do endereco"
+    ResponseEntity<EnderecoDTO> replace(@Schema(description = "Informações do endereco"
     ) EnderecoDTO enderecoDTO);
 
 
@@ -59,5 +59,5 @@ public interface EnderecoControllerSwagger {
             @ApiResponse(responseCode = "204", description = "Endereco encontrado e deletado"),
             @ApiResponse(responseCode = "400", description = "Requisição Errada, endereco não encontrado")
     })
-    ResponseEntity<Void> delete(@PathVariable("id") @Parameter(description = "id do endereco", example = "1, 2, 3") Long id);
+    ResponseEntity<Void> delete(@Parameter(description = "id do endereco", example = "1, 2, 3") Long id);
 }

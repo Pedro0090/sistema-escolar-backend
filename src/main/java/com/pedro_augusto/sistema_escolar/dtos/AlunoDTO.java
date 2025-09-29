@@ -1,22 +1,23 @@
 package com.pedro_augusto.sistema_escolar.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.pedro_augusto.sistema_escolar.domain.enumerations.Sexo;
 import com.pedro_augusto.sistema_escolar.domain.enumerations.SituacaoMatricula;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -68,6 +69,9 @@ public class AlunoDTO {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Campo não pode ser vazio")
     private SituacaoMatricula situacaoMatricula;
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<Long> disciplinas = new ArrayList<>();
 
     @NotBlank(message = "Campo inválido")
     private String curso;

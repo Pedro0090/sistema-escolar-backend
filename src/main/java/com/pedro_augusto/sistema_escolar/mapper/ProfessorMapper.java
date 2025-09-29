@@ -14,7 +14,5 @@ public interface ProfessorMapper {
 
     ProfessorDTO toProfessorDTO(ProfessorEntity professorEntity);
 
-    ProfessorListagemDTO toProfessorListagemDTO(ProfessorEntity professorEntity);
-
     List<ProfessorListagemDTO> toListProfessorListagemDTO(List<ProfessorEntity> professorEntityList);
 }

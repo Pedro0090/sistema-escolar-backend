@@ -2,6 +2,7 @@ package com.pedro_augusto.sistema_escolar.controller;
 
 import com.pedro_augusto.sistema_escolar.dtos.AlunoDTO;
 import com.pedro_augusto.sistema_escolar.dtos.AlunoListagemDTO;
+import com.pedro_augusto.sistema_escolar.dtos.DisciplinaDTO;
 import com.pedro_augusto.sistema_escolar.service.AlunoService;
 import com.pedro_augusto.sistema_escolar.swagger.AlunoControllerSwagger;
 import jakarta.validation.Valid;
@@ -34,6 +35,14 @@ public class AlunoController implements AlunoControllerSwagger {
         return ResponseEntity.ok(alunos);
     }
 
+    @GetMapping(path = "/{matricula}/disciplinas")
+    public ResponseEntity<List<DisciplinaDTO>> findAllDisciplinas(@PathVariable("matricula") String matricula) {
+        log.info("GET /{matricula}/disciplinas - Listando todas as disciplinas do aluno");
+        List<DisciplinaDTO> disciplinas = alunoService.listAllDisciplinas(matricula);
+        log.info("GET /{matricula}/disciplinas - {} disciplinas encontrados", disciplinas.size());
+        return ResponseEntity.ok(disciplinas);
+    }
+
     @GetMapping(path = "/{matricula}")
     public ResponseEntity<AlunoDTO> findByMatricula(@PathVariable("matricula") String matricula) {
         log.info("GET /alunos/{} - Buscando aluno", matricula);
@@ -63,6 +72,13 @@ public class AlunoController implements AlunoControllerSwagger {
         log.info("DELETE /alunos/{} - Deletando aluno", matricula);
         alunoService.delete(matricula);
         log.info("DELETE /alunos/{} - Aluno deletado", matricula);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping(path = "/{matricula}/disciplinas/{id}" )
+    public ResponseEntity<Void> removeDisciplina(@PathVariable("matricula") String matricula,
+                                                 @PathVariable("id") Long id) {
+        alunoService.deleteDisciplina(matricula, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -17,11 +17,11 @@ public class AlunoDisciplinaEntity {
     @Column(name = "REL_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_ALUNO")
     private AlunoEntity alunoEntity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_DISCIPLINA")
     private DisciplinaEntity disciplinaEntity;
 }

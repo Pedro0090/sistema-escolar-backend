@@ -32,6 +32,6 @@ public class DisciplinaEntity {
     @JoinColumn(name = "ID_PROFESSOR")
     private ProfessorEntity professor;
 
-    @OneToMany(mappedBy = "disciplinaEntity")
+    @OneToMany(mappedBy = "disciplinaEntity", fetch = FetchType.LAZY)
     private List<AlunoDisciplinaEntity> alunos = new ArrayList<>();
 }

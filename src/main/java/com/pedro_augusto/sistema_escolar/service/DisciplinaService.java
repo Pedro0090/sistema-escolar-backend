@@ -8,7 +8,6 @@ import com.pedro_augusto.sistema_escolar.domain.AlunoDisciplinaEntity;
 import com.pedro_augusto.sistema_escolar.domain.AlunoEntity;
 import com.pedro_augusto.sistema_escolar.domain.DisciplinaEntity;
 import com.pedro_augusto.sistema_escolar.domain.ProfessorEntity;
-import com.pedro_augusto.sistema_escolar.dtos.AlunoDTO;
 import com.pedro_augusto.sistema_escolar.dtos.AlunoListagemDTO;
 import com.pedro_augusto.sistema_escolar.dtos.DisciplinaDTO;
 import com.pedro_augusto.sistema_escolar.mapper.AlunoMapper;

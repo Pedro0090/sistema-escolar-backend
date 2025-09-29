@@ -60,10 +60,10 @@ public class AlunoEntity {
     @Column(name = "CURSO")
     private String curso;
 
-    @OneToMany(mappedBy = "aluno")
+    @OneToMany(mappedBy = "aluno", fetch = FetchType.LAZY)
     private List<EnderecoEntity> enderecos = new ArrayList<>();
 
-    @OneToMany(mappedBy = "alunoEntity")
+    @OneToMany(mappedBy = "alunoEntity", fetch = FetchType.LAZY)
     private List<AlunoDisciplinaEntity> disciplinas = new ArrayList<>();
 
     public void setNome(String nome) {

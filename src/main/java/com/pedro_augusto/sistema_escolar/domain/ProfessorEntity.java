@@ -56,7 +56,7 @@ public class ProfessorEntity {
     @Column(name = "SALARIO")
     private Double salario;
 
-    @OneToMany(mappedBy = "professor")
+    @OneToMany(mappedBy = "professor", fetch = FetchType.LAZY)
     private List<DisciplinaEntity> disciplinas = new ArrayList<>();
 
     public void setNome(String nome) {
